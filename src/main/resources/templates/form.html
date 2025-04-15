@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<span th:replace="~{fragments/head}"/>
+<span th:replace="~{fragments/navbar}"/>
+
+<body>
+
+
+
+<div class="main-content mt-0">
+    <div class="card shadow-sm border-0" >
+        <div class="card-header">
+            <h4>Formulário de Envio de Mensagens</h4>
+            <p>Informe todos os dados solicitados abaixo e clique no botão "Enviar Mensagem", no final do
+                formulário.</p>
+        </div>
+
+        <div class="card-body">
+
+
+
+
+            <form action="#" method="post" th:object="${solicitacao}">
+                <!-- Select -->
+                <div class="row">
+                    <div class="col-lg-6 col-12 mb-3">
+                        <label for="inputConcurso" class="form-label">Selecione o Concurso ou o Processo Seletivo</label>
+                            <select class="form-select" th:field="*{concurso}" name="concurso" id="inputConcurso" required>
+                                <option value="" selected>Selecione o Concurso ou o Processo Seletivo</option>
+                                <option th:each="concurso : ${concursos}" th:value="${concurso.concurso}" th:text="${concurso.descricao}"></option>
+                            </select>
+                        <div th:if="${#fields.hasErrors('concurso')}" class="text-danger">
+                            <span th:errors="*{concurso}"></span>
+                        </div>
+
+                        <small id="concursoHelp" class="form-text text-muted">
+                            * Caso selecione "Outro", especifique o assunto no campo de texto abaixo.
+                        </small>
+                    </div>
+                    <div class="col-lg-6 col-12 mb-3">
+                        <label class="form-label">Selecione o tipo do assunto</label>
+                        <br>
+                        <div th:each="assunto : ${assuntos}" class="form-check form-check-inline">
+                            <h5><input class="form-check-input" type="radio" th:field="*{tipoAssunto}" th:value="${assunto.id}" th:id="'tipoAssunto-' + ${assunto.id}" required>
+                            <label class="form-check-label" th:attr="for='tipoAssunto-' + ${assunto.id}" th:text="${assunto.descricao}"></label></h5>
+                        </div>
+
+                        <div th:if="${#fields.hasErrors('tipoAssunto')}" class="text-danger">
+                            <span th:errors="*{tipoAssunto}"></span>
+                        </div>
+                        <br>
+                        <small id="assuntoHelp" class="form-text text-muted">
+                            * Assim saberemos identificar mais rápido do que se trata a solicitação.
+                        </small>
+                    </div>
+                </div>
+
+
+                <!-- Nome do Solicitante e CPF -->
+                <div class="row">
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="inputNome" class="form-label">Nome do Solicitante</label>
+                        <input type="text" class="form-control" th:field="*{nome}" id="inputNome" name="nome" placeholder="Digite seu nome" required>
+                        <div th:if="${#fields.hasErrors('nome')}" class="text-danger">
+                            <span th:errors="*{nome}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="inputCpf" class="form-label">Número do C.P.F.</label>
+                        <input type="text" class="form-control" id="inputCpf" th:field="*{cpf}" name="cpf" placeholder="Digite seu C.P.F." required>
+                        <div th:if="${#fields.hasErrors('cpf')}" class="text-danger">
+                            <span th:errors="*{cpf}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RG, UF e Data de Nascimento -->
+                <div class="row">
+                    <div class="col-md-4 col-12 mb-3">
+                        <label for="inputRg" class="form-label">Número do R.G.</label>
+                        <input type="text" class="form-control" id="inputRg" th:field="*{rg}" name="rg" placeholder="Digite seu R.G." required>
+                        <div th:if="${#fields.hasErrors('rg')}" class="text-danger">
+                            <span th:errors="*{rg}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12 mb-3">
+                        <label for="inputUf" class="form-label">UF do R.G.</label>
+                        <select class="form-select" th:field="*{ufRg}" name="ufRg" id="inputUf" required>
+                            <option value="" selected>Selecione a U.F.</option>
+                            <option th:each="estado : ${estados}" th:value="${estado.uf}" th:text="${estado.nome}"></option>
+                        </select>
+                        <div th:if="${#fields.hasErrors('ufRg')}" class="text-danger">
+                            <span th:errors="*{ufRg}"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-12 mb-3">
+                        <label for="inputNascimento" class="form-label">Data de Nascimento</label>
+                        <input type="text" class="form-control" th:field="*{dataNascimento}" name="dataNascimento" id="inputNascimento" placeholder="DD/MM/AAAA" required>
+                        <div th:if="${#fields.hasErrors('dataNascimento')}" class="text-danger">
+                            <span th:errors="*{dataNascimento}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- E-mail, Telefone -->
+                <div class="row">
+                    <div class="col-12 col-md-6 mb-3">
+                        <label for="inputEmail" class="form-label">Endereço de E-mail para a resposta do NC:</label>
+                        <input type="email" class="form-control" th:field="*{email}" id="inputEmail" name="email" placeholder="Digite seu e-mail"
+                               required>
+                    </div>
+                    <div class="col-12 col-md-1 mb-3">
+                        <label for="inputDDD" class="form-label">DDD</label>
+                        <input type="text" class="form-control" th:field="*{ddd}" id="inputDDD" name="ddd" placeholder="Digite o DDD" required  maxlength="2" title="Digite um DDD válido com 2 dígitos">
+                        <div th:if="${#fields.hasErrors('ddd')}" class="text-danger">
+                            <span th:errors="*{ddd}"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-5 mb-3">
+                        <label for="inputTelefone" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="inputTelefone" th:field="*{telefone}" name="telefone" placeholder="Digite o telefone"
+                               required>
+                        <div th:if="${#fields.hasErrors('telefone')}" class="text-danger">
+                            <span th:errors="*{telefone}"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Texto do Formulário -->
+                <div class="row" style=" justify-content: center;">
+                    <div class="col-12 col-md-9 mb-3">
+                        <div th:if="${('solicitacaoJaEnviada')}" class="text-danger">
+                            <span class="text-danger" th:text="${solicitacaoJaEnviada}"></span>
+                        </div>
+                        <label for="editor" class="form-label">Texto da Solicitação</label>
+
+                        <textarea id="editor" class="form-control" th:field="*{solicitacao}" name="solicitacao" rows="10" required></textarea>
+
+                        <div th:if="${#fields.hasErrors('solicitacao')}" class="text-danger">
+                            <span th:errors="*{solicitacao}"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Botão Enviar -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Enviar Mensagem</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal de Revisão -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">Confirme seus dados</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+
+                <p><strong>Concurso:</strong> <span id="reviewConcurso"></span></p>
+                <p><strong>Assunto:</strong> <span id="reviewAssunto"></span></p>
+                <p><strong>Nome:</strong> <span id="reviewNome"></span></p>
+                <p><strong>CPF:</strong> <span id="reviewCpf"></span></p>
+                <p><strong>RG:</strong> <span id="reviewRg"></span></p>
+                <p><strong>UF do RG:</strong> <span id="reviewUfRg"></span></p>
+                <p><strong>Data de Nascimento:</strong> <span id="reviewNascimento"></span></p>
+                <p><strong>E-mail:</strong> <span id="reviewEmail"></span></p>
+                <p><strong>Telefone:</strong> <span id="reviewTelefone"></span></p>
+                <p><strong>Texto da Solicitação:</strong></p>
+                <p id="reviewSolicitacao" style="white-space: pre-line; border: 1px solid #ddd; padding: 10px; border-radius: 5px;"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Corrigir</button>
+                <button type="button" class="btn btn-primary" id="confirmarEnvio">Confirmar e Enviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/script}"/>
+
+<!--<script th:inline="javascript">-->
+<!--    /*<![CDATA[*/-->
+<!--    var concursos = /*[[${concursos}]]*/ []; // Lista de concursos passada pelo Thymeleaf-->
+
+<!--    // $(document).ready(function() {-->
+<!--        var concursoSelecionado = $('#concursoHidden').val(); // Obtém o ID do concurso selecionado-->
+
+<!--        $('#inputConcurso').flexdatalist({-->
+<!--            minLength: 0,-->
+<!--            searchIn: 'descricao', // Pesquisa no campo "descricao"-->
+<!--            data: concursos, // Dados disponíveis-->
+<!--            valueField: 'concurso', // ID do concurso-->
+<!--            valueProperty: 'concurso', // ID do concurso ao enviar o formulário-->
+<!--            textField: 'descricao', // O que será exibido ao usuário-->
+<!--            visibleProperties: ['descricao'], // Exibe a descrição ao usuário-->
+<!--            selectionRequired: true, // Seleção obrigatória-->
+<!--            allowDuplicateValues: false, // Evita valores duplicados-->
+<!--            debug: true, // Ativa o modo de depuração-->
+<!--            altInput: true,-->
+<!--            altClass: 'form-control'-->
+<!--        });-->
+
+<!--        // Se houver um concurso selecionado, definir no input-->
+<!--        if (concursoSelecionado) {-->
+<!--            var concursoObj = concursos.find(item => item.concurso == concursoSelecionado);-->
+<!--            if (concursoObj) {-->
+<!--                setTimeout(function () {-->
+<!--                    $('#inputConcurso').flexdatalist('value', concursoObj.descricao);-->
+<!--                    console.log("passou");-->
+<!--                }, 5000); // Pequeno delay para garantir que o plugin foi inicializado-->
+<!--            }-->
+<!--        }-->
+<!--    // });-->
+<!--    /*]]>*/-->
+<!--</script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>-->
+<script>
+    $(document).ready(function() {
+        $('#inputNascimento').mask('00/00/0000'); // Aplica a máscara para data no formato DD/MM/AAAA
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+
+        // Quando clicar no botão de envio, preenche os dados no modal e exibe
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Impede o envio imediato
+
+            // Captura os valores do formulário
+            document.getElementById("reviewConcurso").innerText = document.getElementById("inputConcurso").selectedOptions[0].text;
+
+            const assuntoSelecionado = document.querySelector('input[name="tipoAssunto"]:checked');
+            document.getElementById("reviewAssunto").innerText = assuntoSelecionado ? assuntoSelecionado.nextElementSibling.innerText : "Não informado";
+
+            document.getElementById("reviewNome").innerText = document.getElementById("inputNome").value;
+            document.getElementById("reviewCpf").innerText = document.getElementById("inputCpf").value;
+            document.getElementById("reviewRg").innerText = document.getElementById("inputRg").value;
+            document.getElementById("reviewUfRg").innerText = document.getElementById("inputUf").selectedOptions[0].text;
+            document.getElementById("reviewNascimento").innerText = document.getElementById("inputNascimento").value;
+            document.getElementById("reviewEmail").innerText = document.getElementById("inputEmail").value;
+            document.getElementById("reviewTelefone").innerText = "(" + document.getElementById("inputDDD").value + ") " + document.getElementById("inputTelefone").value;
+            document.getElementById("reviewSolicitacao").innerText = document.getElementById("editor").value;
+
+            // Exibe o modal de confirmação
+            let modal = new bootstrap.Modal(document.getElementById("confirmModal"));
+            modal.show();
+        });
+
+        // Quando confirmar no modal, envia o formulário
+        document.getElementById("confirmarEnvio").addEventListener("click", function () {
+            form.submit();
+        });
+    });
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,33 @@
+
+<script src="/SolicitacaoSeis/js/bootstrap.js"></script>
+<script src="/SolicitacaoSeis/js/jquery-3.6.0.min.js"></script>
+<script src="/SolicitacaoSeis/js/purify.min.js"></script>
+<script src="/SolicitacaoSeis/js/jquery.flexdatalist.min.js"></script>
+<script src="/SolicitacaoSeis/js/jquery.mask.min.js"></script>
+<script>
+    // Alternar entre modo claro e escuro
+    const toggleButton = document.getElementById('toggle-mode');
+    const logo = document.getElementById('logo');
+
+    // Verifica se o elemento de logo e o botão de alternância existem
+    if (logo && toggleButton) {
+        toggleButton.addEventListener('click', () => {
+            // Alterna a classe 'dark-mode' no body
+            document.body.classList.toggle('dark-mode');
+
+            // Alterna o ícone do botão e a logo dependendo do modo
+            if (document.body.classList.contains('dark-mode')) {
+                toggleButton.textContent = '🌞'; // Sol (modo claro)
+                logo.src = '/SolicitacaoSeis/img/logo-02.png'; // Logo para o modo claro
+            } else {
+                toggleButton.textContent = '🌙'; // Lua (modo escuro)
+                logo.src = '/SolicitacaoSeis/img/logo-01.png'; // Logo para o modo escuro
+            }
+        });
+    } else {
+        console.error('Erro: Elementos de logo ou botão não encontrados.');
+    }
+
+
+
+</script>

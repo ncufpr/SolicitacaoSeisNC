@@ -1,0 +1,664 @@
+/* Configuração básica do corpo */
+body {
+    background: #FEECE2; /* Fundo pêssego pastel */
+    line-height: 1.6;
+}
+
+/* Estilo para o conteúdo principal */
+.main-content {
+    margin: 50px;
+    padding: 70px 70px 70px 70px;/* Adiciona um espaçamento de 50px no conteúdo principal */
+}
+
+/* Estilo da imagem na navbar */
+.navbar-brand img {
+    height: 150px;
+    margin-left: 40px;
+}
+
+/* Estilo para a navbar com gradiente */
+.navbar-gradient {
+    background: linear-gradient(135deg, #FFF6F0, #F5C6A5); /* Gradiente de tons pêssego */
+    color: #5B4636; /* Texto marrom suave */
+}
+
+/* Estilos das links e textos da navbar */
+.navbar-gradient .navbar-brand,
+.navbar-gradient .nav-link,
+.navbar-gradient h5 {
+    color: #1a1d20; /* Garante que o texto seja visível */
+}
+
+.navbar-gradient .nav-link:hover {
+    color: #fd7e14; /* Efeito de hover */
+}
+
+/* Estilos dos grupos de entrada */
+.input-group-text {
+    white-space: normal;  /* Permite que o texto se ajuste na linha */
+    word-wrap: break-word;  /* Faz com que o texto longa se quebre para a próxima linha */
+}
+
+.input-group {
+    display: flex;
+    flex-wrap: wrap;  /* Permite que os elementos se ajustem em telas pequenas */
+}
+
+/* Estilo do editor */
+/*#editor {*/
+/*    height: 200px;      !* Altura do editor *!*/
+/*    width: 100%;        !* Largura do editor *!*/
+/*    background: #fff;   !* Cor de fundo *!*/
+/*    border: 1px solid #ddd; !* Borda leve *!*/
+/*    padding: 10px;*/
+/*}*/
+
+/*!* Estilos para os ícones dentro do editor *!*/
+/*#editor i {*/
+/*    color: #5B4636; !* Cor padrão dos ícones *!*/
+/*}*/
+
+/*!* Estilos para os botões dentro do editor *!*/
+/*#editor button {*/
+/*    background-color: #F5C6A5; !* Cor de fundo padrão no modo claro *!*/
+/*    border: 1px solid #F3B390; !* Borda suave *!*/
+/*    color: #5B4636; !* Cor do texto do botão *!*/
+/*    padding: 5px 10px;*/
+/*    cursor: pointer;*/
+/*    font-size: 16px;*/
+/*}*/
+
+/*#editor button:hover {*/
+/*    background-color: #F3B390; !* Cor de fundo ao passar o mouse *!*/
+/*    color: white; !* Texto branco *!*/
+/*}*/
+
+/*#editor button:focus {*/
+/*    outline: none;*/
+/*    border-color: #fd7e14; !* Borda de destaque ao focar no botão *!*/
+/*}*/
+
+/* Caixa para o marcador */
+input[type="checkbox"] {
+    appearance: none;
+    position: relative;
+    /* Tamanho */
+    width: 1.500rem;
+    height: 1.250rem;
+    /* Cor do fundo e borda */
+    background-color: #fff;
+    border: 0.125rem solid #ccc;
+    border-radius: 0.50rem;
+}
+
+/* Características do marcador */
+input[type="checkbox"]::before {
+    content: "";
+    /* Posicionar no meio */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Tamanho do marcador */
+    width: 0.75rem;
+    height: 0.75rem;
+    /* Formato do marcador */
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    /* Posicionar no meio */
+    transform: translate(-50%, -50%) scale(0);
+    transform-origin: center;
+    transition: 0.125s transform ease-in-out;
+    /* Cor do marcador */
+    box-shadow: inset 1rem 1rem #fff;
+}
+
+/* Cor da caixa para o marcador */
+input[type="checkbox"]:checked {
+    background-color: #e0138c;
+    border-color: #e0138c;
+}
+
+/* Características do marcador quando selecionado */
+input[type="checkbox"]:checked::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Características do marcador quando selecionado */
+input[type="checkbox"]:disabled {
+    opacity: 0.25;
+}
+
+input[type="checkbox"]:focus {
+    border-color: #e0138c;
+}
+
+input[type="checkbox"]:focus + label {
+    color: #e0138c;
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 576px) {
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .card {
+        padding: 0;
+        margin: 0;
+    }
+
+    .main-content {
+        margin: 0;
+        padding: 0;
+    }
+
+    .container, .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+}
+
+/* Estilos para o modo claro */
+body {
+    background: #FEECE2; /* Fundo pêssego pastel */
+    line-height: 1.6;
+}
+
+.navbar-gradient {
+    background: linear-gradient(135deg, #FFF6F0, #F5C6A5); /* Gradiente de tons pêssego */
+    color: #5B4636; /* Texto marrom suave */
+}
+
+.card {
+    min-height: 200px; /* Define uma altura mínima para uniformizar os cards */
+}
+
+.card-header {
+    background: linear-gradient(135deg, #F5C6A5, #FEECE2); /* Tons de laranja pastel */
+    color: #5B4636; /* Texto marrom escuro */
+}
+
+.card-body {
+    background: linear-gradient(135deg, #FFF6F0, #D6EADF); /* Contraste suave de tons */
+    padding: 2rem;
+    color: #5B4636; /* Texto marrom escuro */
+}
+
+/* Botões */
+/* Botões */
+.btn-primary {
+    background-color: #F5C6A5; /* Cor pêssego no modo claro */
+    border-color: #F3B390;
+    color: #5B4636;
+    padding: 0.8rem 1.2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #F3B390; /* Cor de fundo ao passar o mouse no modo claro */
+    border-color: #E69B70;
+    color: white;
+}
+
+.dropdown-menu{
+    background-color: #F3B390; /* Cor de fundo ao passar o mouse no modo claro */
+    border-color: #E69B70;
+    color: white;
+
+}
+
+/* Estilos para o modo escuro */
+body.dark-mode .dropdown-menu {
+    background-color: #444; /* Cor de fundo no modo escuro */
+    border: 1px solid #555; /* Borda mais suave no modo escuro */
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .dropdown-menu .dropdown-item {
+    color: white !important;
+    background-color: #444 !important; /* Mesmo fundo do menu */
+}
+
+
+/* Estilos para o modo escuro */
+body.dark-mode .btn-primary {
+    background-color: #444; /* Cor de fundo no modo escuro */
+    border: 1px solid #555; /* Borda mais suave no modo escuro */
+    color: #f5f5f5; /* Cor do texto clara */
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .btn-primary:hover {
+    background-color: #666; /* Fundo mais claro ao passar o mouse no modo escuro */
+    border-color: #777; /* Borda mais clara ao passar o mouse */
+    color: #f5f5f5; /* Texto claro no hover */
+}
+
+body.dark-mode {
+    background-color: #181818; /* Fundo escuro */
+    color: #f5f5f5; /* Texto claro */
+}
+
+body.dark-mode {
+    background-color: #181818; /* Fundo escuro */
+    color: #f5f5f5; /* Texto claro */
+}
+
+body.dark-mode .navbar-gradient {
+    background: linear-gradient(135deg, #333, #444); /* Gradiente escuro para a navbar */
+    color: #f5f5f5;
+}
+
+body.dark-mode .navbar-gradient .navbar-brand,
+body.dark-mode .navbar-gradient .nav-link,
+body.dark-mode .navbar-gradient h5 {
+    color: #f5f5f5;
+}
+
+body.dark-mode .card-header {
+    background: linear-gradient(135deg, #444, #555); /* Gradiente suave para o cabeçalho */
+    color: #f5f5f5;
+}
+
+body.dark-mode .card-body {
+    background: linear-gradient(135deg, #333, #444); /* Fundo escuro suave */
+    color: #f5f5f5;
+}
+
+
+
+body.dark-mode small {
+    color: #f5f5f5 !important; /* Texto pequeno em cor clara no modo escuro */
+}
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center; /* Centraliza os itens verticalmente */
+    justify-content: center; /* Centraliza os itens horizontalmente */
+}
+
+/* Estilos do botão de alternância */
+/* Estilos do botão de alternância */
+#toggle-mode {
+    background-color: #feece2; /* Cor inicial */
+    color: white;
+    border: none;
+    width: 60px; /* Largura fixa para garantir forma circular */
+    height: 60px; /* Altura igual à largura */
+    font-size: 3rem;
+    border-radius: 50%; /* Torna o botão circular */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    display: flex;
+    align-items: center; /* Centraliza o ícone/texto verticalmente */
+    justify-content: center; /* Centraliza o ícone/texto horizontalmente */
+    transition: all 0.3s ease; /* Transição suave para hover */
+    margin-right: 40px;
+}
+
+
+#toggle-mode:hover {
+    background-color: #E69B70; /* Cor de fundo ao passar o mouse */
+    color: white; /* Cor do texto ao passar o mouse */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Sombra mais forte ao passar o mouse */
+}
+
+body.dark-mode #toggle-mode {
+    background-color: #333; /* Cor de fundo no modo escuro */
+    color: #fff; /* Cor do texto no modo escuro */
+    border-color: #555; /* Borda mais suave no modo escuro */
+}
+
+body.dark-mode #toggle-mode:hover {
+    background-color: #444; /* Cor de fundo ao passar o mouse no modo escuro */
+    color: #fff; /* Garantir que o texto continue branco */
+}
+
+/* Transição suave para o fundo e bordas do botão */
+body.dark-mode #toggle-mode {
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Cor para ícones no editor e texto pequeno */
+/*#editor {*/
+/*    height: 200px;      !* Altura do editor *!*/
+/*    width: 100%;        !* Largura do editor *!*/
+/*    background: #fff;   !* Cor de fundo *!*/
+/*    border: 1px solid #ddd; !* Borda leve *!*/
+/*    padding: 10px;*/
+/*}*/
+
+/*!* Estilos para os ícones dentro do editor *!*/
+/*#editor i {*/
+/*    color: #5B4636; !* Cor padrão dos ícones *!*/
+/*}*/
+
+
+
+/*#editor button:hover {*/
+/*    background-color: #F3B390; !* Cor de fundo ao passar o mouse *!*/
+/*    color: white; !* Texto branco *!*/
+/*}*/
+
+/*#editor button:focus {*/
+/*    outline: none;*/
+/*    border-color: #fd7e14; !* Borda de destaque ao focar no botão *!*/
+/*}*/
+
+/* Estilos do toolbar */
+#toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+
+/* Modo escuro */
+body.dark-mode {
+    background-color: #181818; /* Fundo escuro */
+    color: #f5f5f5; /* Texto claro */
+}
+
+/* Toolbar no modo escuro */
+body.dark-mode #toolbar span,
+body.dark-mode #toolbar select,
+body.dark-mode #toolbar button {
+    background-color: #ffffff; /* Fundo escuro para selects e botões */
+    border: 1px solid #ffffff; /* Borda clara */
+    color: #000000; /* Texto branco */
+}
+
+/* Efeito de hover para botões no modo escuro */
+body.dark-mode #toolbar button:hover {
+    background-color: #444; /* Fundo mais escuro ao passar o mouse */
+    color: white; /* Texto branco */
+}
+
+/* Efeito de foco para botões no modo escuro */
+body.dark-mode #toolbar button:focus {
+    outline: none;
+    border-color: #ffffff; /* Borda clara ao focar */
+}
+
+/* Estilos para selects no modo escuro */
+body.dark-mode #toolbar select {
+    background-color: #333; /* Fundo escuro para o select */
+    color: #ffffff; /* Cor do texto no select */
+}
+
+/* Modificando o editor para o modo escuro */
+/*body.dark-mode #editor {*/
+/*    background-color: #333;  !* Fundo escuro para o editor *!*/
+/*    color: #ffffff;  !* Texto branco no editor *!*/
+/*    border: 1px solid #ffffff; !* Borda branca *!*/
+/*}*/
+
+/* Modificando os ícones no editor para o modo escuro */
+body.dark-mode #editor i {
+    color: #ffffff; /* Ícones claros no modo escuro */
+}
+
+/* Modificando o editor para o modo escuro */
+body.dark-mode .note-editing-area{
+    background-color: #fff;  /* Mantém o fundo claro para o editor */
+    color: #000;  /* Texto escuro no editor */
+    border: 1px solid #ddd; /* Borda leve */
+}
+/* Estilo padrão do botão de alternância (navbar-toggler) */
+.navbar-toggler {
+    background-color: #F5C6A5; /* Cor de fundo padrão */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px; /* Bordas arredondadas */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover no modo claro */
+.navbar-toggler:hover {
+    background-color: #E69B70; /* Cor ao passar o mouse */
+    transform: scale(1.1); /* Efeito de crescimento */
+}
+
+/* Ícone interno no modo claro */
+.navbar-toggler .navbar-toggler-icon {
+    background-image: url('data:image/svg+xml;charset=UTF8,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%231a1d20" viewBox="0 0 30 30"%3E%3Cpath stroke="rgba%281,1,1,0.5%29" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
+}
+
+/* Botão no modo escuro */
+body.dark-mode .navbar-toggler {
+    background-color: #444; /* Fundo escuro */
+    color: #f5f5f5; /* Texto claro */
+}
+
+/* Hover no modo escuro */
+body.dark-mode .navbar-toggler:hover {
+    background-color: #555; /* Hover mais claro */
+    transform: scale(1.1);
+}
+
+/* Ícone interno no modo escuro */
+body.dark-mode .navbar-toggler .navbar-toggler-icon {
+    background-image: url('data:image/svg+xml;charset=UTF8,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="%23ffffff" viewBox="0 0 30 30"%3E%3Cpath stroke="rgba%28255,255,255,0.5%29" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
+}
+
+#dmUsuario{
+    margin-left: 50px;
+}
+
+/* Aplica estilos apenas quando o modo escuro estiver ativo */
+.dark-mode .dataTables_wrapper {
+    color: #fff; /* Texto branco */
+    font-family: 'Arial', sans-serif; /* Escolha a fonte desejada */
+}
+
+/* Fundo da tabela em cinza claro */
+.dark-mode table.dataTable {
+    background-color: #b0b0b0; /* Cinza claro */
+    color: #fff; /* Texto branco */
+}
+
+/* Cabeçalho da tabela */
+.dark-mode table.dataTable thead {
+    background-color: #999; /* Cinza médio */
+    color: #fff; /* Texto branco */
+}
+
+/* Linhas da tabela */
+.dark-mode table.dataTable tbody tr {
+    background-color: #bbb; /* Cinza claro */
+    color: #fff; /* Texto branco */
+}
+
+/* Linhas alternadas */
+.dark-mode table.dataTable tbody tr:nth-child(even) {
+    background-color: #c7c7c7; /* Cinza um pouco mais escuro */
+}
+
+/* Estilizando os botões de paginação */
+/*.dark-mode .dataTables_wrapper .dataTables_paginate .paginate_button {*/
+/*    color: #fff !important; !* Texto branco *!*/
+/*    background-color: #666 !important; !* Fundo cinza escuro *!*/
+/*    border: 1px solid #444 !important;*/
+/*}*/
+
+/* Botão ativo */
+.dark-mode .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #007bff !important; /* Azul para destacar */
+    color: white !important;
+}
+
+/* Campo de pesquisa */
+.dark-mode .dataTables_wrapper .dataTables_filter input {
+    background-color: #999; /* Cinza médio */
+    color: #1a1d20;
+    border: 1px solid #666;
+}
+
+ .dataTables_wrapper .dataTables_paginate .paginate_button .page-link {
+    background-color: #F5C6A5 !important; /* Cinza escuro */
+    color: #1a1d20 !important; /* Texto branco */
+    border: 1px solid #F3B390 !important;
+    margin: 25px 0px 0px 5px !important; /* Adiciona espaçamento lateral */
+    /*border-color: #F3B390;*/
+}
+
+.dark-mode .dataTables_wrapper .dataTables_paginate .paginate_button .page-link {
+    background-color: #999 !important; /* Cinza escuro */
+    color: #1a1d20 !important; /* Texto branco */
+    border: 1px solid #ffffff !important;
+    margin: 25px 0px 0px 5px !important; /* Adiciona espaçamento lateral */
+}
+
+/* Fundo do modal específico */
+#loader-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* Maior valor para garantir visibilidade */
+}
+
+/* Overlay deve estar abaixo do modal */
+#loader-modal .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998; /* Abaixo do modal */
+}
+
+/* Modal-content precisa estar acima do overlay */
+#loader-modal .modal-content {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    z-index: 10000; /* Coloca acima do overlay */
+    width: 300px;
+    max-width: 90%;
+}
+
+#loader-modal .loader-container img {
+    max-width: 125px;
+    max-height: 125px;
+    width: 100%;
+    height: auto;
+}
+
+#listaAssuntos {
+    max-height: 40vh; /* Limita a altura da lista */
+    overflow-y: auto; /* Adiciona rolagem apenas na lista se necessário */
+    width: 100%; /* Faz com que a lista ocupe toda a largura disponível */
+}
+
+/* Ajuste nos itens da lista para evitar quebra desnecessária */
+#listaAssuntos .list-group-item {
+    /*word-wrap: break-word; !* Quebra palavras longas *!*/
+    white-space: normal; /* Permite que o texto quebre para a próxima linha */
+    /*overflow: hidden;*/
+    text-overflow: ellipsis; /* Adiciona "..." se o texto for muito longo */
+}
+
+/* Evita que o botão "Remover" fique fora da tela */
+#listaAssuntos .btn {
+    white-space: nowrap; /* Mantém o botão no tamanho correto */
+}
+
+.email-badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f8f9fa; /* Cor clara */
+    color: #333;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin: 3px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.email-badge button {
+    background: none;
+    border: none;
+    font-weight: bold;
+    margin-left: 8px;
+    cursor: pointer;
+    color: #dc3545; /* Vermelho */
+}
+
+.email-badge button:hover {
+    color: #a71d2a;
+}
+
+/* Estilo para quando um e-mail estiver marcado como BCC */
+.email-badge.bcc {
+    background-color: #ffeeba; /* Amarelo claro */
+    color: #856404; /* Marrom escuro */
+    border-color: #ffc107;
+}
+
+.email-badge.bcc button {
+    color: #856404;
+}
+
+.email-badge.bcc button:hover {
+    color: #6c4a00;
+}
+#fileList .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#fileList .list-group-item i {
+    margin-right: 10px; /* Espaçamento entre o ícone e o nome do arquivo */
+}
+
+#fileList .list-group-item .btn-link {
+    margin-left: 10px; /* Espaçamento entre o nome do arquivo e o botão */
+}
+
+#fileList .list-group-item .btn-danger {
+    margin-left: auto; /* Empurra o botão para o final do item da lista */
+}
+
+#selectionArea {
+    background-color: rgba(0, 0, 255, 0.1); /* Cor de fundo leve */
+    position: absolute;
+    z-index: 9999; /* Certifique-se de que está na frente de outros elementos */
+}
+
+body.dark-mode .modal-content {
+    background-color: #333; /* Fundo escuro */
+    color: #f5f5f5; /* Texto claro */
+}
+
+body.dark-mode .modal-header {
+    background-color: #444; /* Cabeçalho escuro */
+    color: #f5f5f5;
+}
+
+body.dark-mode .modal-footer {
+    background-color: #444;
+}
+
+body.dark-mode .text-muted {
+    background-color: #f8f9fa;
+}
+
+
+/*@media (prefers-color-scheme: dark) {*/
+/*    .text-muted {*/
+/*        color: #f8f9fa !important; !* Texto claro no modo escuro *!*/
+/*    }*/
+/*}*/
