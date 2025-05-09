@@ -9,6 +9,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -61,6 +62,9 @@ public class Solicitacao {
     @ManyToOne
     @JoinColumn(name = "id_prioridade")
     private Prioridade prioridade;
+
+    @OneToMany(mappedBy = "solicitacao")
+    private List<RespostaSolicitacao> respostaSolicitacaoList;
 
     public Solicitacao() {}
 

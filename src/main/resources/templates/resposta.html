@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<span th:replace="~{fragments/head}"/>
+<span th:replace="~{fragments/navbar}"/>
+
+<body>
+
+<div class="main-content mt-4">
+    <div class="container">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-header bg-success text-center rounded-top-4">
+                <h4 class="mb-0">✅ Resposta da Solicitação</h4>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="mb-3">
+                    <strong>📌 Nome:</strong>
+                    <span th:text="${respostaDTO.nomeSolicitante}"></span>
+                </div>
+
+                <div class="mb-3">
+                    <strong>📧 Email:</strong>
+                    <span th:text="${respostaDTO.emailSolicitante}"></span>
+                </div>
+
+                <div class="mb-3">
+                    <strong>🔢 N.º da Solicitação:</strong>
+                    <span th:text="${respostaDTO.idSolicitacao}"></span>
+                </div>
+
+                <div class="mb-3">
+                    <strong>📅 Data da Solicitação:</strong>
+                    <span th:text="${respostaDTO.dataSolicitacao}"></span>
+                </div>
+
+                <div class="mb-3">
+                    <strong>📌 Tipo do Assunto:</strong>
+                    <span th:text="${respostaDTO.titulo}"></span>
+                </div>
+                <hr class="my-4"/>
+                <div class="mb-3">
+                    <strong>📝 Solicitação:</strong>
+                    <p th:utext="${respostaDTO.solicitacao}"></p>
+                </div>
+                <hr class="my-4"/>
+
+                <div class="mb-3">
+                    <strong>📩 Resposta da Solicitação:</strong>
+                    <p th:utext="${respostaDTO.resposta}"></p>
+                </div>
+
+                <div class="mb-3" th:if="${respostaDTO.anexo}">
+                    <strong>📎 Anexo:</strong>
+                    <br/>
+                        <span th:utext="${respostaDTO.anexo}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/script}"/>
+</body>
+</html>
