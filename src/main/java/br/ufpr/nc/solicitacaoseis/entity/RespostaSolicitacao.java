@@ -1,10 +1,9 @@
 package br.ufpr.nc.solicitacaoseis.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,9 +13,13 @@ public class RespostaSolicitacao {
     private String codigoResposta;
     private String resposta;
     private String anexoResposta;
+    private Integer avaliacao;
 
     @ManyToOne
     @JoinColumn(name = "id_solicitacao")
     private Solicitacao solicitacao;
+
+    @OneToMany(mappedBy = "respostaSolicitacao")
+    private List<SolicitacaoRespostaHist> solicitacaoRespostasHist;
 
 }

@@ -11,7 +11,8 @@ import java.time.format.DateTimeParseException;
 
 @Component
 public class Mapper {
-
+    @Autowired
+    private Util util;
     private static final DateTimeFormatter FORMATTER_DDMMYYYY = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter FORMATTER_YYYYMMDD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -62,10 +63,14 @@ public class Mapper {
 
         // Convertendo os campos básicos
         dto.setNome(solicitacao.getNome());
-        dto.setCpf(String.valueOf(solicitacao.getCpf())); // O CPF será formatado depois
+        dto.setCpf(util.formatarCPF( String.valueOf(solicitacao.getCpf()))); // O CPF será formatado depois
         dto.setRg(solicitacao.getRg());
         dto.setUfRg(solicitacao.getUfRg());
         dto.setEmail(solicitacao.getEmail());
+        if(solicitacao.getIdSolicitacao() != null){
+            dto.setIdSolicitacao(solicitacao.getIdSolicitacao());
+        }
+
 
         // Formatando a data de nascimento
         if (solicitacao.getDataNascimento() != null) {
@@ -79,11 +84,17 @@ public class Mapper {
         // Convertendo as entidades relacionadas para seus IDs
         if (solicitacao.getConcurso() != null) {
             dto.setConcurso(String.valueOf(solicitacao.getConcurso().getDescricao()));
+            dto.setConcursoId(String.valueOf(solicitacao.getConcurso().getConcurso()));
         }
 
+
+
         if (solicitacao.getTipoAssunto() != null) {
-            dto.setTipoAssunto(String.valueOf(solicitacao.getTipoAssunto().getDescricao()));
+            dto.setTipoAssunto(String.valueOf(solicitacao.getTipoAssunto().getId()));
+            dto.setTipoAssuntoDescricao(String.valueOf(solicitacao.getTipoAssunto().getDescricao()));
         }
+
+
 
         // Você pode adicionar outros campos se necessário
 //        dto.setStatus(String.valueOf(solicitacao.getStatus().getIdStatus()));

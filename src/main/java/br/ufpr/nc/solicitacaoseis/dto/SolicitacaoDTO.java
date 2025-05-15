@@ -55,13 +55,18 @@ public class SolicitacaoDTO {
 
     private Date dataSolicitacao;
 
-    @NotNull(message = "O Concurso ou o Processo Seletivo é obrigatório.")
-    @SecureString
+
     private String concurso;
 
     @NotNull(message = "Selecione o tipo da solicitação.")
     @SecureString
     private String tipoAssunto;
 
+    private String tipoAssuntoDescricao;
 
+    private Long idSolicitacao;
+
+    @NotNull(message = "O Concurso ou o Processo Seletivo é obrigatório.")
+    @SecureString
+    private String concursoId;
 }

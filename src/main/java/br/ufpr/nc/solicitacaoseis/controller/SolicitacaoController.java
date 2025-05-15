@@ -1,7 +1,9 @@
 package br.ufpr.nc.solicitacaoseis.controller;
 
+
 import br.ufpr.nc.solicitacaoseis.config.JwtTokenService;
 import br.ufpr.nc.solicitacaoseis.dto.SolicitacaoDTO;
+import br.ufpr.nc.solicitacaoseis.en.TipoEventoSolicitacao;
 import br.ufpr.nc.solicitacaoseis.entity.*;
 import br.ufpr.nc.solicitacaoseis.service.*;
 import br.ufpr.nc.solicitacaoseis.util.Mapper;
@@ -38,6 +40,8 @@ public class SolicitacaoController {
     private final Util util;
     private final JwtTokenService tokenService;
 
+    private final SolicitacaoRespostaHistService solicitacaoRespostaHistService;
+
     @GetMapping
     public String showForm(Model model) {
         model.addAttribute("solicitacao", model.getAttribute("solicitacao") != null ? model.getAttribute("solicitacao") : new SolicitacaoDTO());
@@ -49,6 +53,7 @@ public class SolicitacaoController {
 
     @PostMapping
     public String postForm(@Valid @ModelAttribute("solicitacao") SolicitacaoDTO solicitacao, BindingResult result,
+                           @RequestParam(required = false) Long idSolicitacao,
                            HttpSession session, RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
@@ -56,9 +61,9 @@ public class SolicitacaoController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.solicitacao", result);
             return "redirect:/form";
         }
-
+        System.out.println(idSolicitacao);
         Optional<Status> status = statusService.getStatus(6);
-        Optional<Concurso> concurso = concursoService.findConcursoById(Long.parseLong(solicitacao.getConcurso()));
+        Optional<Concurso> concurso = concursoService.findConcursoById(Long.parseLong(solicitacao.getConcursoId()));
         Optional<TipoAssunto> tipoAssunto = tipoAssuntoService.findById(Long.parseLong(solicitacao.getTipoAssunto()));
         Optional<Prioridade> prioridade = prioridadeService.findById(1);
 
@@ -81,8 +86,33 @@ public class SolicitacaoController {
         String token = tokenService.gerarToken(solicitacaoSalva.getIdSolicitacao());
         session.setAttribute("token", token);
 
+//        solicitacaoRespostaHist.save(solicitacaoSalva, new RespostaSolicitacao(), String.valueOf(TipoEventoSolicitacao.SOLICITACAO_ENVIADA), LocalDateTime.now());
+
+        SolicitacaoRespostaHist sr = new SolicitacaoRespostaHist();
+        sr.setSolicitacao(solicitacaoSalva);
+        sr.setRespostaSolicitacao(new RespostaSolicitacao());
+        sr.setStatus(String.valueOf(TipoEventoSolicitacao.SOLICITACAO_ENVIADA));
+        boolean solicitacaoBoolean = false;
+        if(idSolicitacao != null) {
+            solicitacaoBoolean = true;
+        }
+
+
+        if(solicitacaoBoolean) {
+            solicitacaoBoolean = true;
+            Solicitacao solicitacao1 = solicitacaoService.findById(idSolicitacao);
+            solicitacaoRespostaHistService.registrarEventoSolicitacao(solicitacao1, solicitacaoSalva, solicitacaoBoolean);
+        } else {
+            solicitacaoRespostaHistService.registrarEventoSolicitacao(novaSolicitacao, solicitacaoSalva, solicitacaoBoolean);
+        }
+
+
+
+
+
         return "redirect:/form/solicitacao/sucesso";
     }
+
 
     @GetMapping("/solicitacao/sucesso")
     public String showSuccessPage(HttpSession session, Model model) {
@@ -123,6 +153,29 @@ public class SolicitacaoController {
         return "solicitacao";
     }
 
+    @GetMapping("/reenviar/{id}")
+    public String reenviarSolicitacao(@PathVariable Long id, Model model) {
+        // Buscar a solicitação anterior no banco
+        Optional<Solicitacao> solicitacaoAntiga = Optional.ofNullable(solicitacaoService.findById(id));
+        if (solicitacaoAntiga.isEmpty()) {
+            // Redireciona com mensagem de erro ou retorna página de erro
+            return "redirect:/erro";
+        }
+
+        Solicitacao anterior = solicitacaoAntiga.get();
+        SolicitacaoDTO dto = new SolicitacaoDTO();
+        dto.setNome(anterior.getNome());
+        dto.setEmail(anterior.getEmail());
+        dto.setSolicitacao(anterior.getSolicitacao());
+        // Outros campos conforme necessário
+
+        model.addAttribute("solicitacao", dto);
+        model.addAttribute("concursos", concursoService.findAllConcursosAtivos());
+        model.addAttribute("assuntos", tipoAssuntoService.findAll());
+        model.addAttribute("estados", estadosService.findAll());
+
+        return "form";
+    }
 
 
 

@@ -66,6 +66,9 @@ public class Solicitacao {
     @OneToMany(mappedBy = "solicitacao")
     private List<RespostaSolicitacao> respostaSolicitacaoList;
 
+    @OneToMany(mappedBy = "solicitacao")
+    private List<SolicitacaoRespostaHist> solicitacaoRespostasHist;
+
     public Solicitacao() {}
 
     public Solicitacao(Long cpf, String nome, String rg, String ufRg, String email, LocalDate dataNascimento, String ddd, String telefone, String solicitacao, Concurso concurso, TipoAssunto tipoAssunto, Status status, Prioridade prioridade) {

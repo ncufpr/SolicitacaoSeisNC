@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    deu ruim
+<html lang="pt-br" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<span th:replace="~{fragments/head}"/>
+<body class="d-flex align-items-center justify-content-center vh-100 bg-light">
+
+<div class="container text-center">
+    <div class="card shadow-lg p-4 bg-white rounded d-flex justify-content-center align-items-center" style="height: 300px;">
+        <h1 class="text-danger">Oops! Não foi possível encontrar essa resposta.</h1>
+    </div>
+</div>
+
 </body>
 </html>
