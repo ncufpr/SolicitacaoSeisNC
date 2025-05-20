@@ -157,7 +157,7 @@
                                 </div>
                                 <div class="col-md-6 col-12 mb-3">
                                     <label class="form-label">Número do C.P.F.</label>
-                                    <input type="text" class="form-control" th:field="*{cpf}" required>
+                                    <input type="text" class="form-control" readonly style="background-color: lightgrey" th:field="*{cpf}" required>
                                     <div class="text-danger" th:errors="*{cpf}"></div>
                                 </div>
                             </div>
