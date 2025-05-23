@@ -7,11 +7,25 @@
 <script src="/SolicitacaoSeis/js/sweetalert2@11.js"></script>
 <script>
     // Alternar entre modo claro e escuro
+
+
     const toggleButton = document.getElementById('toggle-mode');
     const logo = document.getElementById('logo');
 
     // Verifica se o elemento de logo e o botão de alternância existem
     if (logo && toggleButton) {
+        // Verifica o tema armazenado no localStorage e aplica a classe apropriada
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            toggleButton.textContent = '🌞'; // Sol (modo claro)
+            logo.src = '/SolicitacaoSeis/img/logo-02.png'; // Logo para o modo claro
+        } else {
+            document.body.classList.remove('dark-mode');
+            toggleButton.textContent = '🌙'; // Lua (modo escuro)
+            logo.src = '/SolicitacaoSeis/img/logo-01.png'; // Logo para o modo escuro
+        }
+
+        // Adiciona o evento de clique para alternar o tema
         toggleButton.addEventListener('click', () => {
             // Alterna a classe 'dark-mode' no body
             document.body.classList.toggle('dark-mode');
@@ -20,15 +34,17 @@
             if (document.body.classList.contains('dark-mode')) {
                 toggleButton.textContent = '🌞'; // Sol (modo claro)
                 logo.src = '/SolicitacaoSeis/img/logo-02.png'; // Logo para o modo claro
+                // Salva a escolha no localStorage
+                localStorage.setItem('theme', 'dark');
             } else {
                 toggleButton.textContent = '🌙'; // Lua (modo escuro)
                 logo.src = '/SolicitacaoSeis/img/logo-01.png'; // Logo para o modo escuro
+                // Salva a escolha no localStorage
+                localStorage.setItem('theme', 'light');
             }
         });
     } else {
         console.error('Erro: Elementos de logo ou botão não encontrados.');
     }
-
-
 
 </script>

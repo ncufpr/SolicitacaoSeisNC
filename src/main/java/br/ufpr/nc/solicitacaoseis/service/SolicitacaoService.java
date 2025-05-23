@@ -33,8 +33,16 @@ public class SolicitacaoService {
                 solicitacao.getStatus());
 
         // Filtrar os registros manualmente comparando o conteúdo do CLOB
+//        return solicitacoes.stream()
+//                .filter(s -> stringToClob(s.getSolicitacao()).equals(stringToClob(solicitacao.getSolicitacao())))
+//                .collect(Collectors.toList());
+
         return solicitacoes.stream()
-                .filter(s -> stringToClob(s.getSolicitacao()).equals(stringToClob(solicitacao.getSolicitacao())))
+                .filter(s -> {
+                    String solicitacaoBanco = s.getSolicitacao();
+                    String solicitacaoNova = solicitacao.getSolicitacao();
+                    return solicitacaoBanco.equalsIgnoreCase(solicitacaoNova); // case-sensitive por padrão
+                })
                 .collect(Collectors.toList());
     }
 
