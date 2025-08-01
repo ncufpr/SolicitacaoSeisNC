@@ -656,7 +656,37 @@ body.dark-mode .text-muted {
     background-color: #f8f9fa;
 }
 
+.star-rating {
+    direction: rtl;
+    display: inline-flex;
+    gap: 5px;
+}
+.star-rating input[type="radio"] {
+    display: none;
+}
+.star-rating label {
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.star-rating input[type="radio"]:checked ~ label {
+    color: #f5b301;
+}
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f5b301;
+}
 
+#comentarioContainer textarea {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 14px;
+}
 /*@media (prefers-color-scheme: dark) {*/
 /*    .text-muted {*/
 /*        color: #f8f9fa !important; !* Texto claro no modo escuro *!*/

@@ -6,30 +6,6 @@
 <span th:replace="~{fragments/navbar}"/>
 
 
-<style>
-    .star-rating {
-        direction: rtl;
-        display: inline-flex;
-        gap: 5px;
-    }
-    .star-rating input[type="radio"] {
-        display: none;
-    }
-    .star-rating label {
-        font-size: 2rem;
-        color: #ccc;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-    .star-rating input[type="radio"]:checked ~ label {
-        color: #f5b301;
-    }
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-        color: #f5b301;
-    }
-</style>
-
 
 <body>
 
@@ -97,21 +73,28 @@
                     <span th:text="${msgError}"></span>
                 </div>
 
-                <div th:if="${respostaDTO.avaliacao == null}">
-                    <div class="mb-3 text-center">
-                        <strong> Deseja avaliar o atendimento ou enviar uma nova solicitação a partir dessa❓</strong>
-                        <div class="mt-3">
-                            <button id="btnAvaliar" class="btn btn-warning me-2">Avaliar Atendimento</button>
-                            <button id="btnNovaSolicitacao" class="btn btn-outline-success">Enviar Solicitação</button>
+<!--                <div th:if="${respostaDTO.avaliacao == null}">-->
+                <div class="mb-3 text-center">
+                    <div class="d-flex justify-content-center mt-3 gap-2 flex-wrap">
+                        <a th:href="@{/form}" class="btn btn-info">
+                            ➕ Fazer uma nova solicitação
+                        </a>
+                        <div th:if="${respostaDTO.avaliacao == null}">
+                            <button id="btnAvaliar" class="btn btn-warning me-2">
+                                ⭐ Avaliar Atendimento
+                            </button>
                         </div>
+
+                        <button id="btnNovaSolicitacao" class="btn btn-success">
+                            💬 Continuar este atendimento
+                        </button>
+
                     </div>
                 </div>
-                <div th:unless="${respostaDTO.avaliacao == null}">
-                    <div class="text-center mt-3">
-                        <p>✅ Esta solicitação foi avaliada.</p>
-                        <a th:href="@{/form}" class="btn btn-primary">Clique aqui para fazer uma nova solicitação</a>
-                    </div>
-                </div>
+<!--                </div>-->
+<!--                <div th:unless="${respostaDTO.avaliacao == null}">-->
+
+<!--                </div>-->
 
 
 
@@ -119,7 +102,8 @@
                 <div id="containerFormulario" style="display: none;">
                     <div class="card-body">
                         <div class="card-header">Nova solicitação</div>
-                        <form th:action="@{/form}" th:object="${solicitacao}" method="post">
+                        <form th:action="@{/resposta/respostaSolicitacao}" th:object="${solicitacao}" method="post">
+<!--                            <form th:action="@{/form}" th:object="${solicitacao}" method="post">-->
                             <input type="hidden" th:field="*{idSolicitacao}">
                             <div class="row">
                                 <div class="col-lg-6 col-12 mb-3">
@@ -212,6 +196,7 @@
                                     <label for="editor" class="form-label">Texto da Solicitação</label>
                                     <textarea id="editor" class="form-control" th:field="*{solicitacao}" rows="10" required></textarea>
                                     <div class="text-danger" th:errors="*{solicitacao}"></div>
+                                    <span class="text-danger" th:text="${erro}">Essa solicitação já foi enviada! Por favor aguarde a resposta.</span>
                                 </div>
                             </div>
 
@@ -223,31 +208,39 @@
                 </div>
 
 
+                <div th:if="${respostaDTO.avaliacao == null}">
+                    <div id="avaliacaoContainer" style="display: none;" class="text-center mt-4">
+                        <form th:action="@{/resposta/avaliar}" method="post" id="formAvaliacao">
+                            <input type="hidden" name="idRespostaSolicitacao" th:value="${respostaDTO.idRespostaSolicitacao}" />
+                            <div class="star-rating">
+                                <input id="star5" type="radio" name="nota" value="5">
+                                <label for="star5" title="Excelente">★</label>
 
-                <div id="avaliacaoContainer" style="display: none;" class="text-center mt-4">
-                    <form th:action="@{/resposta/avaliar}" method="post" id="formAvaliacao">
-                        <input type="hidden" name="idRespostaSolicitacao" th:value="${respostaDTO.idRespostaSolicitacao}" />
-                        <div class="star-rating">
-                            <input id="star5" type="radio" name="nota" value="5">
-                            <label for="star5" title="Excelente">★</label>
+                                <input id="star4" type="radio" name="nota" value="4">
+                                <label for="star4" title="Bom">★</label>
 
-                            <input id="star4" type="radio" name="nota" value="4">
-                            <label for="star4" title="Bom">★</label>
+                                <input id="star3" type="radio" name="nota" value="3">
+                                <label for="star3" title="Regular">★</label>
 
-                            <input id="star3" type="radio" name="nota" value="3">
-                            <label for="star3" title="Regular">★</label>
+                                <input id="star2" type="radio" name="nota" value="2">
+                                <label for="star2" title="Ruim">★</label>
 
-                            <input id="star2" type="radio" name="nota" value="2">
-                            <label for="star2" title="Ruim">★</label>
+                                <input id="star1" type="radio" name="nota" value="1">
+                                <label for="star1" title="Péssimo">★</label>
+                            </div>
 
-                            <input id="star1" type="radio" name="nota" value="1">
-                            <label for="star1" title="Péssimo">★</label>
-                        </div>
-                        <div class="mt-3">
-                            <button type="submit" class="btn btn-primary btn-sm">Enviar Avaliação</button>
-                        </div>
-                    </form>
+                            <div id="comentarioContainer" class="mb-3">
+                            <textarea name="comentario" id="comentario" maxlength="1000" class="form-control"
+                                      rows="3" placeholder="Deixe seu comentário"></textarea>
+                            </div>
+
+                            <div class="mt-3">
+                                <button type="submit" class="btn btn-primary btn-sm">Enviar Avaliação</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+
             </div>
 
         </div>
@@ -257,58 +250,106 @@
 </div>
 
 <div th:replace="~{fragments/script}"/>
-<script>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        // Recupera o valor do backend (true/false)
+        const abrirFormulario = /*[[${abrirFormulario} ?: false]]*/ false;
 
+        // Se true, mostra o formulário e ajusta botão
+        if (abrirFormulario) {
+            $('#containerFormulario').show();
+            $('#btnNovaSolicitacao').html('❌ Cancelar esse atendimento');
+        }
 
-        $(document).ready(function() {
-            // Máscara para CPF
-            $('input[name="cpf"]').mask('000.000.000-00');
+        // Máscara para CPF
+        $('input[name="cpf"]').mask('000.000.000-00');
 
-            // Máscara para DDD
-            $('input[name="ddd"]').mask('00');
+        // Máscara para DDD
+        $('input[name="ddd"]').mask('00');
 
-            // Máscara para data de nascimento
-            $('input[name="dataNascimento"]').mask('00/00/0000'); // Aplica a máscara para data no formato DD/MM/AAAA
+        // Máscara para data de nascimento
+        $('input[name="dataNascimento"]').mask('00/00/0000');
 
+        // Máscara dinâmica para telefone
+        var telefoneMaskBehavior = function (val) {
+            return val.replace(/\D/g, '').length === 9 ? '00000-0000' : '0000-00009';
+        };
 
-
-            var telefoneMaskBehavior = function (val) {
-                return val.replace(/\D/g, '').length === 9 ? '00000-0000' : '0000-00009';
-            };
-
-            var telefoneOptions = {
-                onKeyPress: function (val, e, field, options) {
-                    field.mask(telefoneMaskBehavior.apply({}, arguments), options);
-                }
-            };
-
-            $('input[name="telefone"]').mask(telefoneMaskBehavior, telefoneOptions);
-
-
-
-
-        $('#btnAvaliar').click(function () {
-            $('#avaliacaoContainer').slideDown();
-            $('#containerFormulario').slideUp();
-        });
-
-        $('#btnNovaSolicitacao').click(function () {
-            $('#containerFormulario').slideDown();
-            $('#avaliacaoContainer').slideUp();
-        });
-
-        document.getElementById("formAvaliacao").addEventListener("submit", function (e) {
-            if (!$("input[name='nota']:checked").length) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Selecione uma nota',
-                    text: 'Por favor, escolha uma estrela antes de enviar sua avaliação.',
-                });
+        var telefoneOptions = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(telefoneMaskBehavior.apply({}, arguments), options);
             }
+        };
+
+        $('input[name="telefone"]').mask(telefoneMaskBehavior, telefoneOptions);
+
+        // Função para abrir/fechar seções
+        function toggleSection(button, sectionToShow, otherButton, otherSection, texts, otherTexts) {
+            const isVisible = $(sectionToShow).is(':visible');
+
+            if (isVisible) {
+                $(sectionToShow).slideUp();
+                button.html(texts.show);
+            } else {
+                $(sectionToShow).slideDown();
+                $(otherSection).slideUp();
+                button.html(texts.hide);
+                otherButton.html(otherTexts.show);
+            }
+        }
+
+        // Botão Avaliar
+        $('#btnAvaliar').click(function () {
+            toggleSection(
+                $(this), '#avaliacaoContainer',
+                $('#btnNovaSolicitacao'), '#containerFormulario',
+                { show: '⭐ Avaliar Atendimento', hide: '❌ Cancelar Avaliação' },
+                { show: '💬 Continuar esse atendimento', hide: '❌ Cancelar esse atendimento' }
+            );
         });
+
+        // Botão Nova Solicitação
+        $('#btnNovaSolicitacao').click(function () {
+            toggleSection(
+                $(this), '#containerFormulario',
+                $('#btnAvaliar'), '#avaliacaoContainer',
+                { show: '💬 Continuar esse atendimento', hide: '❌ Cancelar esse atendimento' },
+                { show: '⭐ Avaliar Atendimento', hide: '❌ Cancelar Avaliação' }
+            );
         });
+
+        // Validação do formulário de avaliação
+        const formAvaliacao = document.getElementById("formAvaliacao");
+        if (formAvaliacao) {
+            formAvaliacao.addEventListener("submit", function (e) {
+                const notaSelecionada = $("input[name='nota']:checked").val();
+
+                if (!notaSelecionada) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Selecione uma nota',
+                        text: 'Por favor, escolha uma estrela antes de enviar sua avaliação. ⭐',
+                    });
+                    return;
+                }
+
+                const comentario = $("#comentario").val().trim();
+                if (parseInt(notaSelecionada, 10) < 5 && comentario.length === 0) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Comentário obrigatório',
+                        text: 'Por favor, descreva o motivo da avaliação antes de enviar.',
+                    });
+                }
+            });
+        }
+    });
 </script>
+
+
+
 </body>
 
 </html>

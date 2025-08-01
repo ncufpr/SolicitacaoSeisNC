@@ -2,6 +2,7 @@ package br.ufpr.nc.solicitacaoseis.service;
 
 import br.ufpr.nc.solicitacaoseis.dto.RespostaSolicitacaoDTO;
 import br.ufpr.nc.solicitacaoseis.entity.RespostaSolicitacao;
+import br.ufpr.nc.solicitacaoseis.entity.Solicitacao;
 import br.ufpr.nc.solicitacaoseis.repository.RespostaSolicitacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class RespostaSolicitacaoService {
                             resposta.getAnexoResposta(),
                             solicitacao.getSolicitacao(),
                             resposta.getAvaliacao(),
+                            resposta.getComentario(),
                             solicitacao.getIdSolicitacao(),               // idSolicitacao
                             solicitacao.getNome(),  // adaptável ao seu modelo
                             solicitacao.getEmail(),
@@ -41,9 +43,14 @@ public class RespostaSolicitacaoService {
         return respostaSolicitacaoRepository.findById(idRespostaSolicitacao);
     }
 
-    public boolean avaliarResposta(Long idRespostaSolicitacao, Integer nota) {
-        int atualizados = respostaSolicitacaoRepository.atualizarNota(idRespostaSolicitacao, nota);
+    public Optional<RespostaSolicitacao> findByIdSolicitacao(Long idSolicitacao) {
+        return respostaSolicitacaoRepository.findByIdSolicitacao(idSolicitacao);
+    }
+
+    public boolean avaliarResposta(Long idRespostaSolicitacao, Integer nota, String comentario) {
+        int atualizados = respostaSolicitacaoRepository.atualizarNotaEComentario(idRespostaSolicitacao, nota, comentario);
         return atualizados > 0;
     }
+
 
 }

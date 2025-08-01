@@ -14,6 +14,7 @@ public class RespostaSolicitacaoDTO {
     private String anexo;
     private String solicitacao;
     private Integer avaliacao;
+    private String comentario;
 
     // Dados da Solicitação
     private Long idSolicitacao;

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,95 +31,133 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SolicitacaoController {
 
-    private final ConcursoService concursoService;
-    private final TipoAssuntoService tipoAssuntoService;
-    private final EstadosService estadosService;
-    private final StatusService statusService;
-    private final PrioridadeService prioridadeService;
-    private final SolicitacaoService solicitacaoService;
-    private final Mapper mapper;
-    private final Util util;
-    private final JwtTokenService tokenService;
+    @Autowired
+    private NovaSolicitacaoFacade novaSolicitacaoFacade;
+    @Autowired
+    private JwtTokenService tokenService;
+    @Autowired
+    private SolicitacaoService solicitacaoService;
+    @Autowired
+    private ConcursoService concursoService;
+    @Autowired
+    private TipoAssuntoService tipoAssuntoService;
+    @Autowired
+    private EstadosService estadosService;
+    @Autowired
+    private Mapper mapper;
+    @Autowired
+    private Util util;
+
 
     private final SolicitacaoRespostaHistService solicitacaoRespostaHistService;
 
     @GetMapping
     public String showForm(Model model) {
-        model.addAttribute("solicitacao", model.getAttribute("solicitacao") != null ? model.getAttribute("solicitacao") : new SolicitacaoDTO());
+        if (!model.containsAttribute("solicitacao")) {
+            model.addAttribute("solicitacao", new SolicitacaoDTO());
+        }
         model.addAttribute("concursos", concursoService.findAllConcursosAtivos());
         model.addAttribute("assuntos", tipoAssuntoService.findAll());
         model.addAttribute("estados", estadosService.findAll());
         return "form";
     }
 
-    @PostMapping
-    public String postForm(@Valid @ModelAttribute("solicitacao") SolicitacaoDTO solicitacao, BindingResult result,
-                           @RequestParam(required = false) Long idSolicitacao,
-                           HttpSession session, RedirectAttributes redirectAttributes) {
+//    @PostMapping
+//    public String postForm(@Valid @ModelAttribute("solicitacao") SolicitacaoDTO solicitacao, BindingResult result,
+//                           @RequestParam(required = false) Long idSolicitacao,
+//                           HttpSession session, RedirectAttributes redirectAttributes) {
+//
+//        if (result.hasErrors()) {
+//            redirectAttributes.addFlashAttribute("solicitacao", solicitacao);
+//            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.solicitacao", result);
+//            return "redirect:/form";
+//        }
+//        System.out.println(idSolicitacao);
+//        Optional<Status> status = statusService.getStatus(6);
+//        Optional<Concurso> concurso = concursoService.findConcursoById(Long.parseLong(solicitacao.getConcursoId()));
+//        Optional<TipoAssunto> tipoAssunto = tipoAssuntoService.findById(Long.parseLong(solicitacao.getTipoAssunto()));
+//        Optional<Prioridade> prioridade = prioridadeService.findById(1);
+//
+//        if (status.isEmpty() || concurso.isEmpty() || tipoAssunto.isEmpty() || prioridade.isEmpty()) {
+//            log.error("Erro ao criar solicitação: um dos dados obrigatórios está ausente");
+//            redirectAttributes.addFlashAttribute("erro", "Erro ao criar solicitação.");
+//            return "redirect:/form";
+//        }
+//
+//        Solicitacao novaSolicitacao = mapper.toSolicitacaoToEntity(solicitacao, status.get(), tipoAssunto.get(), prioridade.get(), concurso.get());
+//        novaSolicitacao.setDataSolicitacao(LocalDateTime.now());
+//
+//        if (!solicitacaoService.findByCpfSolicitacaoidConcursoidTipoAssuntoidStatus(novaSolicitacao).isEmpty()) {
+//            redirectAttributes.addFlashAttribute("solicitacao", solicitacao);
+//            redirectAttributes.addFlashAttribute("solicitacaoJaEnviada", "Essa solicitação já foi enviada! Por favor aguarde!");
+//            return "redirect:/form";
+//        }
+//
+//        Solicitacao solicitacaoSalva = solicitacaoService.salvar(novaSolicitacao);
+//        String token = tokenService.gerarToken(solicitacaoSalva.getIdSolicitacao());
+//        session.setAttribute("token", token);
+//
+////        solicitacaoRespostaHist.save(solicitacaoSalva, new RespostaSolicitacao(), String.valueOf(TipoEventoSolicitacao.SOLICITACAO_ENVIADA), LocalDateTime.now());
+//
+//        SolicitacaoRespostaHist sr = new SolicitacaoRespostaHist();
+//        sr.setSolicitacao(solicitacaoSalva);
+//        sr.setRespostaSolicitacao(new RespostaSolicitacao());
+//        sr.setStatus(String.valueOf(TipoEventoSolicitacao.SOLICITACAO_ENVIADA));
+//        boolean solicitacaoBoolean = false;
+//        if(idSolicitacao != null) {
+//            solicitacaoBoolean = true;
+//        }
+//
+//
+//        if(solicitacaoBoolean) {
 
+    /// /            solicitacaoBoolean = true;
+//            Solicitacao solicitacao1 = solicitacaoService.findById(idSolicitacao);
+//            solicitacaoRespostaHistService.registrarEventoSolicitacao(solicitacao1, solicitacaoSalva, solicitacaoBoolean);
+//        } else {
+//            solicitacaoRespostaHistService.registrarEventoSolicitacao(novaSolicitacao, solicitacaoSalva, solicitacaoBoolean);
+//        }
+//
+//        return "redirect:/form/solicitacao/sucesso";
+//    }
+    @PostMapping
+    public String postForm(@Valid @ModelAttribute("solicitacao") SolicitacaoDTO solicitacao,
+                           BindingResult result,
+                           HttpSession session,
+                           RedirectAttributes redirectAttributes) {
+
+        String redirectUrl = "redirect:/form";
+
+        // Validação de formulário
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("solicitacao", solicitacao);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.solicitacao", result);
-            return "redirect:/form";
-        }
-        System.out.println(idSolicitacao);
-        Optional<Status> status = statusService.getStatus(6);
-        Optional<Concurso> concurso = concursoService.findConcursoById(Long.parseLong(solicitacao.getConcursoId()));
-        Optional<TipoAssunto> tipoAssunto = tipoAssuntoService.findById(Long.parseLong(solicitacao.getTipoAssunto()));
-        Optional<Prioridade> prioridade = prioridadeService.findById(1);
-
-        if (status.isEmpty() || concurso.isEmpty() || tipoAssunto.isEmpty() || prioridade.isEmpty()) {
-            log.error("Erro ao criar solicitação: um dos dados obrigatórios está ausente");
-            redirectAttributes.addFlashAttribute("erro", "Erro ao criar solicitação.");
-            return "redirect:/form";
+            return redirectUrl;
         }
 
-        Solicitacao novaSolicitacao = mapper.toSolicitacaoToEntity(solicitacao, status.get(), tipoAssunto.get(), prioridade.get(), concurso.get());
-        novaSolicitacao.setDataSolicitacao(LocalDateTime.now());
+        try {
+            // Nova solicitação independente (não reabre ciclo)
+            novaSolicitacaoFacade.processarNovaSolicitacao(solicitacao, session, false);
+            return "redirect:/form/solicitacao/sucesso";
 
-        if (!solicitacaoService.findByCpfSolicitacaoidConcursoidTipoAssuntoidStatus(novaSolicitacao).isEmpty()) {
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            // Erros de negócio
+            redirectAttributes.addFlashAttribute("erro", ex.getMessage());
             redirectAttributes.addFlashAttribute("solicitacao", solicitacao);
-            redirectAttributes.addFlashAttribute("solicitacaoJaEnviada", "Essa solicitação já foi enviada! Por favor aguarde!");
-            return "redirect:/form";
+            return redirectUrl;
+
+        } catch (Exception ex) {
+            log.error("Erro inesperado ao enviar nova solicitação", ex);
+            redirectAttributes.addFlashAttribute("erro", "Erro interno ao processar a solicitação. Tente novamente.");
+            return redirectUrl;
         }
-
-        Solicitacao solicitacaoSalva = solicitacaoService.salvar(novaSolicitacao);
-        String token = tokenService.gerarToken(solicitacaoSalva.getIdSolicitacao());
-        session.setAttribute("token", token);
-
-//        solicitacaoRespostaHist.save(solicitacaoSalva, new RespostaSolicitacao(), String.valueOf(TipoEventoSolicitacao.SOLICITACAO_ENVIADA), LocalDateTime.now());
-
-        SolicitacaoRespostaHist sr = new SolicitacaoRespostaHist();
-        sr.setSolicitacao(solicitacaoSalva);
-        sr.setRespostaSolicitacao(new RespostaSolicitacao());
-        sr.setStatus(String.valueOf(TipoEventoSolicitacao.SOLICITACAO_ENVIADA));
-        boolean solicitacaoBoolean = false;
-        if(idSolicitacao != null) {
-            solicitacaoBoolean = true;
-        }
-
-
-        if(solicitacaoBoolean) {
-            solicitacaoBoolean = true;
-            Solicitacao solicitacao1 = solicitacaoService.findById(idSolicitacao);
-            solicitacaoRespostaHistService.registrarEventoSolicitacao(solicitacao1, solicitacaoSalva, solicitacaoBoolean);
-        } else {
-            solicitacaoRespostaHistService.registrarEventoSolicitacao(novaSolicitacao, solicitacaoSalva, solicitacaoBoolean);
-        }
-
-
-
-
-
-        return "redirect:/form/solicitacao/sucesso";
     }
-
 
     @GetMapping("/solicitacao/sucesso")
     public String showSuccessPage(HttpSession session, Model model) {
         String token = (String) session.getAttribute("token");
 
-            log.info("Token: {}", token);
+        log.info("Token: {}", token);
 
         if (token == null || token.isBlank()) {
             log.warn("Tentativa de acesso sem token válido");
@@ -176,7 +215,6 @@ public class SolicitacaoController {
 
         return "form";
     }
-
 
 
 }

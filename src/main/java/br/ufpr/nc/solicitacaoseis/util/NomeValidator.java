@@ -17,6 +17,6 @@ public class NomeValidator implements ConstraintValidator<ValidNome, String> {
         }
 
         // Regex para validar que o nome contém apenas letras, espaços e tem no máximo 100 caracteres
-        return nome.matches("^[A-Za-zÀ-ÿ]+(?:\\s[A-Za-zÀ-ÿ]+)+$");
+        return nome.matches("^[A-Za-zÀ-ÿ0-9]+(?:\\s[A-Za-zÀ-ÿ0-9]+)+$");
     }
 }

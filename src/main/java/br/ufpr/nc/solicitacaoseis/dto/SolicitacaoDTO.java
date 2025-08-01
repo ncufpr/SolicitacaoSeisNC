@@ -4,6 +4,7 @@ import br.ufpr.nc.solicitacaoseis.util.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Date;
@@ -51,6 +52,7 @@ public class SolicitacaoDTO {
 
     @NotBlank(message = "A solicitação não pode estar vazia.")
     @SecureString
+    @Size(max = 10000, message = "A solicitação não pode conter mais de 10.000 caracteres.")
     private String solicitacao;
 
     private Date dataSolicitacao;

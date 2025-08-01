@@ -14,6 +14,7 @@ public class RespostaSolicitacao {
     private String resposta;
     private String anexoResposta;
     private Integer avaliacao;
+    private String comentario;
 
     @ManyToOne
     @JoinColumn(name = "id_solicitacao")
