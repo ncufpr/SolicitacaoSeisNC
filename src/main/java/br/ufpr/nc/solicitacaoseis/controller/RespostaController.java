@@ -73,23 +73,30 @@ public class RespostaController {
     }
 
     @PostMapping("/avaliar")
-    public String avaliarAtendimento(@RequestParam Long idRespostaSolicitacao, @RequestParam int nota,
-                                     @RequestParam(required = false) String comentario, RedirectAttributes redirectAttributes) {
-        // Salvar avaliação no banco (associar à solicitação)
-//        atendimentoService.salvarAvaliacao(idSolicitacao, nota);
-        Optional<RespostaSolicitacao> respostaSolicitacao = respostaSolicitacaoService.findById(idRespostaSolicitacao);
+    public String avaliarAtendimento(
+            @Valid @ModelAttribute("respostaDTO") RespostaSolicitacaoDTO respostaDTO,
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
 
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("msgError", "Erro: " +
+                    result.getAllErrors().get(0).getDefaultMessage());
+            return "redirect:/resposta/" + respostaDTO.getCodigoResposta();
+        }
 
-        boolean sucesso = respostaSolicitacaoService.avaliarResposta(idRespostaSolicitacao, nota, comentario);
+        boolean sucesso = respostaSolicitacaoService.avaliarResposta(
+                respostaDTO.getIdRespostaSolicitacao(),
+                respostaDTO.getAvaliacao(),
+                respostaDTO.getComentario()
+        );
+
         if (sucesso) {
             redirectAttributes.addFlashAttribute("msgSuccess", "Avaliação registrada com sucesso!");
         } else {
             redirectAttributes.addFlashAttribute("msgError", "Erro ao registrar avaliação.");
         }
 
-        System.out.println(idRespostaSolicitacao);
-        System.out.println(nota);
-        return "redirect:/resposta/" + respostaSolicitacao.get().getCodigoResposta();
+        return "redirect:/resposta/" + respostaDTO.getCodigoResposta();
     }
 
     @PostMapping("/respostaSolicitacao")

@@ -7,8 +7,6 @@
 
 <body>
 
-
-
 <div class="main-content mt-0">
     <div class="card shadow-sm border-0" >
         <div class="card-header">
@@ -27,7 +25,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-12 mb-3">
                         <label for="inputConcurso" class="form-label">Selecione o Concurso ou o Processo Seletivo</label>
-                        <select class="form-select" th:field="*{concursoId}" id="inputConcurso" required>
+                        <select class="form-select" th:field="*{concursoId}" id="inputConcurso" >
                             <option value="" selected>Selecione o Concurso ou o Processo Seletivo</option>
                             <option th:each="concurso : ${concursos}"
                                     th:value="${concurso.concurso}"
@@ -35,6 +33,9 @@
                             </option>
                         </select>
                         <div class="text-danger" th:errors="*{concurso}"></div>
+                        <div id="erroConcurso" class="invalid-feedback" style="display:none;">
+                            Selecione um concurso ou processo seletivo.
+                        </div>
                     </div>
 
                     <div class="col-lg-6 col-12 mb-3">
@@ -48,6 +49,9 @@
                             <label class="form-check-label" th:for="${'assunto-' + assunto.id}" th:text="${assunto.descricao}"></label>
                         </div>
                         <div class="text-danger" th:errors="*{tipoAssunto}"></div>
+                        <div id="erroAssunto" class="invalid-feedback" style="display:none;">
+                            Selecione um tipo de assunto.
+                        </div>
                     </div>
                 </div>
 
@@ -163,106 +167,120 @@
     </div>
 </div>
 
+
+
 <div th:replace="~{fragments/script}"/>
 
-<!--<script th:inline="javascript">-->
-<!--    /*<![CDATA[*/-->
-<!--    var concursos = /*[[${concursos}]]*/ []; // Lista de concursos passada pelo Thymeleaf-->
 
-<!--    // $(document).ready(function() {-->
-<!--        var concursoSelecionado = $('#concursoHidden').val(); // Obtém o ID do concurso selecionado-->
-
-<!--        $('#inputConcurso').flexdatalist({-->
-<!--            minLength: 0,-->
-<!--            searchIn: 'descricao', // Pesquisa no campo "descricao"-->
-<!--            data: concursos, // Dados disponíveis-->
-<!--            valueField: 'concurso', // ID do concurso-->
-<!--            valueProperty: 'concurso', // ID do concurso ao enviar o formulário-->
-<!--            textField: 'descricao', // O que será exibido ao usuário-->
-<!--            visibleProperties: ['descricao'], // Exibe a descrição ao usuário-->
-<!--            selectionRequired: true, // Seleção obrigatória-->
-<!--            allowDuplicateValues: false, // Evita valores duplicados-->
-<!--            debug: true, // Ativa o modo de depuração-->
-<!--            altInput: true,-->
-<!--            altClass: 'form-control'-->
-<!--        });-->
-
-<!--        // Se houver um concurso selecionado, definir no input-->
-<!--        if (concursoSelecionado) {-->
-<!--            var concursoObj = concursos.find(item => item.concurso == concursoSelecionado);-->
-<!--            if (concursoObj) {-->
-<!--                setTimeout(function () {-->
-<!--                    $('#inputConcurso').flexdatalist('value', concursoObj.descricao);-->
-<!--                    console.log("passou");-->
-<!--                }, 5000); // Pequeno delay para garantir que o plugin foi inicializado-->
-<!--            }-->
-<!--        }-->
-<!--    // });-->
-<!--    /*]]>*/-->
-<!--</script>-->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>-->
 <script>
-    $(document).ready(function() {
-        // Máscara para CPF
-        $('input[name="cpf"]').mask('000.000.000-00');
+    document.addEventListener("DOMContentLoaded", function () {
+        // ✅ Inicializa Tom Select
+        const tomSelect = new TomSelect("#inputConcurso", {
+            create: false,
+            sortField: { field: "text", direction: "asc" },
+            placeholder: "Selecione o Concurso ou Processo Seletivo",
+            allowEmptyOption: true,
+            searchField: ["text"]
+        });
 
-        // Máscara para DDD
-        $('input[name="ddd"]').mask('00');
-
-        // Máscara para data de nascimento
-        $('input[name="dataNascimento"]').mask('00/00/0000'); // Aplica a máscara para data no formato DD/MM/AAAA
-
-
+        // ✅ Aplica Máscaras (usando jQuery Mask Plugin)
+        $('input[name="cpf"]').mask('000.000.000-00');  // CPF
+        $('input[name="ddd"]').mask('00');             // DDD
+        $('input[name="dataNascimento"]').mask('00/00/0000'); // Data DD/MM/AAAA
 
         var telefoneMaskBehavior = function (val) {
             return val.replace(/\D/g, '').length === 9 ? '00000-0000' : '0000-00009';
         };
-
         var telefoneOptions = {
             onKeyPress: function (val, e, field, options) {
                 field.mask(telefoneMaskBehavior.apply({}, arguments), options);
             }
         };
-
         $('input[name="telefone"]').mask(telefoneMaskBehavior, telefoneOptions);
 
-    });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
+        // ✅ Elementos do formulário
         const form = document.querySelector("form");
+        const selectElement = document.getElementById("inputConcurso");
+        const tsWrapper = document.querySelector(".ts-wrapper"); // Tom Select wrapper
+        const erroConcurso = document.getElementById("erroConcurso");
+        const erroAssunto = document.getElementById("erroAssunto");
 
-        // Quando clicar no botão de envio, preenche os dados no modal e exibe
+        // ✅ Validação e Modal
         form.addEventListener("submit", function (event) {
-            event.preventDefault(); // Impede o envio imediato
+            event.preventDefault();
 
-            // Captura os valores do formulário
-            document.getElementById("reviewConcurso").innerText = document.getElementById("inputConcurso").selectedOptions[0].text;
+            let formValido = form.checkValidity();
 
+            // Validação Tom Select
+            let selectValido = selectElement.value.trim() !== "";
+            if (!selectValido) {
+                tsWrapper.classList.add("erro-campo");
+                erroConcurso.style.display = "block";
+            } else {
+                tsWrapper.classList.remove("erro-campo");
+                erroConcurso.style.display = "none";
+            }
+
+            // Validação Radio Buttons
             const assuntoSelecionado = document.querySelector('input[name="tipoAssunto"]:checked');
-            document.getElementById("reviewAssunto").innerText = assuntoSelecionado ? assuntoSelecionado.nextElementSibling.innerText : "Não informado";
+            if (!assuntoSelecionado) {
+                erroAssunto.style.display = "block";
+            } else {
+                erroAssunto.style.display = "none";
+            }
 
+            // Se houver erro, não abre modal
+            if (!formValido || !selectValido || !assuntoSelecionado) {
+                form.classList.add("was-validated");
+                return;
+            }
+
+            // Preenche dados no modal
+            document.getElementById("reviewConcurso").innerText = selectElement.selectedOptions[0].text;
+            document.getElementById("reviewAssunto").innerText =
+                assuntoSelecionado ? assuntoSelecionado.nextElementSibling.innerText : "Não informado";
             document.getElementById("reviewNome").innerText = document.getElementById("nome").value;
             document.getElementById("reviewCpf").innerText = document.getElementById("cpf").value;
             document.getElementById("reviewRg").innerText = document.getElementById("rg").value;
-            document.getElementById("reviewUfRg").innerText = document.getElementById("ufRg").selectedOptions[0].text;
+            document.getElementById("reviewUfRg").innerText =
+                document.getElementById("ufRg").selectedOptions[0].text;
             document.getElementById("reviewNascimento").innerText = document.getElementById("dataNascimento").value;
             document.getElementById("reviewEmail").innerText = document.getElementById("email").value;
-            document.getElementById("reviewTelefone").innerText = "(" + document.getElementById("ddd").value + ") " + document.getElementById("telefone").value;
+            document.getElementById("reviewTelefone").innerText =
+                "(" + document.getElementById("ddd").value + ") " + document.getElementById("telefone").value;
             document.getElementById("reviewSolicitacao").innerText = document.getElementById("editor").value;
 
-            // Exibe o modal de confirmação
+            // Abre modal
             let modal = new bootstrap.Modal(document.getElementById("confirmModal"));
             modal.show();
         });
 
-        // Quando confirmar no modal, envia o formulário
+        // Remove erro ao selecionar concurso
+        tomSelect.on("change", function () {
+            if (selectElement.value.trim() !== "") {
+                tsWrapper.classList.remove("erro-campo");
+                erroConcurso.style.display = "none";
+            }
+        });
+
+        // Remove erro ao selecionar assunto
+        document.querySelectorAll('input[name="tipoAssunto"]').forEach(radio => {
+            radio.addEventListener("change", function () {
+                erroAssunto.style.display = "none";
+            });
+        });
+
+        // Confirmar envio
         document.getElementById("confirmarEnvio").addEventListener("click", function () {
             form.submit();
         });
     });
 </script>
+
+
+
+
+
 </body>
 </html>
 

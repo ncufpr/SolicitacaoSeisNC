@@ -1,5 +1,9 @@
 package br.ufpr.nc.solicitacaoseis.dto;
 
+import br.ufpr.nc.solicitacaoseis.util.SecureString;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +17,13 @@ public class RespostaSolicitacaoDTO {
     private String resposta;
     private String anexo;
     private String solicitacao;
+
+    @NotNull(message = "A nota é obrigatória.")
     private Integer avaliacao;
+
+
+    @SecureString
+    @Size(max = 1000, message = "O comentário não pode conter mais de 1000 caracteres.")
     private String comentario;
 
     // Dados da Solicitação

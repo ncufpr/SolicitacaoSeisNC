@@ -1,6 +1,9 @@
 package br.ufpr.nc.solicitacaoseis.entity;
 
+import br.ufpr.nc.solicitacaoseis.util.SecureString;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 import java.util.List;
@@ -14,6 +17,8 @@ public class RespostaSolicitacao {
     private String resposta;
     private String anexoResposta;
     private Integer avaliacao;
+
+
     private String comentario;
 
     @ManyToOne
