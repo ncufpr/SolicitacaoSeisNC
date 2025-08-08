@@ -105,6 +105,7 @@
                         <form th:action="@{/resposta/respostaSolicitacao}" th:object="${solicitacao}" method="post">
 <!--                            <form th:action="@{/form}" th:object="${solicitacao}" method="post">-->
                             <input type="hidden" th:field="*{idSolicitacao}">
+                            <input type="hidden" th:field="*{idRespostaSolicitacao}">
                             <div class="row">
                                 <div class="col-lg-6 col-12 mb-3">
                                     <label for="inputConcurso" class="form-label">Selecione o Concurso ou o Processo Seletivo</label>

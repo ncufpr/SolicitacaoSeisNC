@@ -59,6 +59,7 @@ public class RespostaController {
             Solicitacao solicitacao = solicitacaoService.findById(respostaDTOOpt.get().getIdSolicitacao());
             SolicitacaoDTO solicitacaoDTO = mapper.toSolicitacaoToDto(solicitacao);
             solicitacaoDTO.setSolicitacao("");
+            solicitacaoDTO.setIdRespostaSolicitacao(respostaDTOOpt.get().getIdRespostaSolicitacao());
             if (!model.containsAttribute("solicitacao")) {
                 model.addAttribute("solicitacao", solicitacaoDTO);
             }
@@ -106,7 +107,7 @@ public class RespostaController {
                                       RedirectAttributes redirectAttributes) {
 
         Optional<RespostaSolicitacao> respostaSolicitacao =
-                respostaSolicitacaoService.findByIdSolicitacao(solicitacao.getIdSolicitacao());
+                respostaSolicitacaoService.findById(solicitacao.getIdRespostaSolicitacao());
 
         String redirectUrl = "redirect:/resposta/" + respostaSolicitacao.get().getCodigoResposta();
 

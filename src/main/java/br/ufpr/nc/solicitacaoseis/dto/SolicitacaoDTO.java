@@ -71,4 +71,6 @@ public class SolicitacaoDTO {
     @NotNull(message = "O Concurso ou o Processo Seletivo é obrigatório.")
     @SecureString
     private String concursoId;
+
+    private Long idRespostaSolicitacao;
 }
