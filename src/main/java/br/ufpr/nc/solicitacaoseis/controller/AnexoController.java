@@ -16,7 +16,7 @@ import java.nio.file.Path;
 @RequestMapping("/anexos")
 public class AnexoController {
     @GetMapping("anexosResposta/{id}/{nomeArquivo}")
-    public ResponseEntity<Resource> baixarAnexoResposta(@PathVariable Long id, @PathVariable String nomeArquivo) {
+    public ResponseEntity<Resource> baixarAnexoResposta(@PathVariable String id, @PathVariable String nomeArquivo) {
         try {
             Path caminhoArquivo = Path.of(FilePaths.BASE_PATH_RESPOSTA + id, nomeArquivo);
             Resource resource = new UrlResource(caminhoArquivo.toUri());
