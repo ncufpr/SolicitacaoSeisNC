@@ -24,9 +24,8 @@ public interface SolicitacaoRespostaHistRepository extends JpaRepository<Solicit
         return findByNumeroSolRespOrderByNumeroInteracaoDesc(numeroSolResp).stream().findFirst();
     }
 
-    @Query("SELECT h.numeroSolResp FROM SolicitacaoRespostaHist h " +
-            "WHERE h.solicitacao.idSolicitacao = :idSolicitacao " +
-            "ORDER BY h.numeroInteracao DESC")
+    @Query("SELECT distinct h.numeroSolResp FROM SolicitacaoRespostaHist h " +
+            "WHERE h.solicitacao.idSolicitacao = :idSolicitacao ")
     Optional<Long> findUltimoNumeroSolRespBySolicitacao(@Param("idSolicitacao") Long idSolicitacao);
 
 

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -55,7 +56,7 @@ public class SolicitacaoDTO {
     @Size(max = 10000, message = "A solicitação não pode conter mais de 10.000 caracteres.")
     private String solicitacao;
 
-    private Date dataSolicitacao;
+    private LocalDateTime dataSolicitacao;
 
 
     private String concurso;
